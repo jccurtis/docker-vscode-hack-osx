@@ -6,7 +6,12 @@ PROJECT_NAME := vscode-server
 PROJECT_TAG := $(shell git log -1 --pretty=%h)
 TAGGED_IMAGE := $(PROJECT_NAME):$(PROJECT_TAG)
 LATEST_IMAGE := $(PROJECT_NAME):latest
-BUILD_IT := docker build -t $(TAGGED_IMAGE) --build-arg ROOTPASS=${VSCODESERVER_ROOTPASS}
+BUILD_IT := docker build -t $(TAGGED_IMAGE) \
+	--build-arg USERUID="${UID}" \
+	--build-arg USERGID="${GID}" \
+	--build-arg USERNAME="${VSCODESERVER_USERNAME}" \
+	--build-arg USERPASS="${VSCODESERVER_USERPASS}" \
+	--build-arg ROOTPASS="${VSCODESERVER_ROOTPASS}"
 TAG_LATEST := docker tag $(TAGGED_IMAGE) $(LATEST_IMAGE)
 RUN_ARGS := -p ${VSCODESERVER_PORT}:22 --name $(PROJECT_NAME) -v ${VSCODESERVER_MNTPATH}:/home/${VSCODESERVER_USERNAME}/code --restart unless-stopped $(LATEST_IMAGE)
 
