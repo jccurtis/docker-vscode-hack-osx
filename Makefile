@@ -29,7 +29,7 @@ help:
 run_shell:
 	docker run -it $(RUN_ARGS) bash
 
-build: src misc
+build:
 	$(BUILD_IT) .
 	$(TAG_LATEST)
 
